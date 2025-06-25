@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Itabaza Appointments</title>
+</head>
+<body>
+  <h1>Itabaza Appointments</h1>
+
+  <h2>Book Appointment</h2>
+  <form id="appointmentForm">
+    <label>Patient ID: <input type="number" id="patientId" required /></label><br />
+    <label>Doctor ID: <input type="number" id="doctorId" required /></label><br />
+    <label>Date & Time: <input type="datetime-local" id="date" required /></label><br />
+    <label>Type:
+      <select id="type">
+        <option value="video">Video</option>
+        <option value="in-person">In-person</option>
+      </select>
+    </label><br />
+    <button type="submit">Book</button>
+  </form>
+
+  <h2>All Appointments</h2>
+  <ul id="appointmentsList"></ul>
+
+  <script>
+    async function fetchAppointments() {
+      const res = await fetch('http://localhost:5000/api/appointments');
+      const appointments = await res.json();
+      const list = document.getElementById('appointmentsList');
+      list.innerHTML = '';
+      appointments.forEach(app => {
+        const item = document.createElement('li');
+        item.textContent = `ID: ${app.id}, Patient: ${app.patientid}, Doctor: ${app.doctorid}, Date: ${new Date(app.date).toLocaleString()}, Type: ${app.type}`;
+        list.appendChild(item);
+      });
+    }
+
+    document.getElementById('appointmentForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        patientId: parseInt(document.getElementById('patientId').value),
+        doctorId: parseInt(document.getElementById('doctorId').value),
+        date: document.getElementById('date').value,
+        type: document.getElementById('type').value,
+      };
+      const res = await fetch('http://localhost:5000/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        alert('Appointment booked!');
+        fetchAppointments(); // refresh list
+      } else {
+        alert('Failed to book appointment.');
+      }
+    });
+
+    fetchAppointments(); // Load appointments on page load
+  </script>
+</body>
+</html>
