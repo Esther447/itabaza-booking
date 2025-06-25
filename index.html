@@ -2,151 +2,108 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Itabaza Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      margin: 0; font-family: Helvetica, Arial, sans-serif;
-      background: #f0f4f8; color: #333;
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f7fa;
     }
-    header {
-      background: #0052cc; color: #fff;
-      padding: 1.5rem 2rem;
-      display: flex; justify-content: space-between; align-items: center;
+    .navbar-brand {
+      font-weight: 600;
+      color: #2f54eb;
     }
-    header h1 { margin: 0; font-size: 1.8rem; }
-    header .download-btn {
-      background: #fff; color: #0052cc;
-      padding: 0.7rem 1.2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
+    .hero {
+      background: linear-gradient(to right, #2f54eb, #1890ff);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
     }
-    main {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: #fff;
+    .doctor-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .doctor-card {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .doctor-card:hover {
+      transform: translateY(-5px);
+    }
+    .download-section {
+      background-color: #f0f5ff;
       padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      text-align: center;
     }
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.3rem;
+    .btn-download {
+      background-color: #2f54eb;
+      color: white;
       font-weight: 600;
     }
-    input, select {
-      width: 100%;
-      padding: 0.7rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-    button {
-      background: #0052cc;
-      color: #fff; border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 4px;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #003d99;
-    }
-    .appointments {
-      margin-top: 2rem;
-    }
-    .appointment-card {
-      background: #eef4ff;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    .appointment-card + .appointment-card {
-      margin-top: 0.8rem;
+    .btn-download:hover {
+      background-color: #1d39c4;
     }
   </style>
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Itabaza</a>
+      <a class="btn btn-outline-primary" href="#download">Download App</a>
+    </div>
+  </nav>
 
-<header>
-  <h1>Itabaza Booking</h1>
-  <a href="#" class="download-btn">Download App</a>
-</header>
-
-<main>
-  <h2>Book an Appointment</h2>
-  <form id="apptForm">
-    <div class="form-group">
-      <label for="patient">Patient ID</label>
-      <input type="number" id="patient" name="patientId" required />
+  <section class="hero">
+    <div class="container">
+      <h1 class="display-5 fw-bold">Book Medical Appointments Easily</h1>
+      <p class="lead">Skip the long lines and connect with professional doctors across Rwanda.</p>
     </div>
-    <div class="form-group">
-      <label for="doctor">Doctor ID</label>
-      <input type="number" id="doctor" name="doctorId" required />
-    </div>
-    <div class="form-group">
-      <label for="datetime">Date & Time</label>
-      <input type="datetime-local" id="datetime" name="date" required />
-    </div>
-    <div class="form-group">
-      <label for="type">Type</label>
-      <select id="type" name="type">
-        <option value="video">Video</option>
-        <option value="in-person">In-person</option>
-      </select>
-    </div>
-    <button type="submit">Book Now</button>
-  </form>
-
-  <section class="appointments">
-    <h2>Upcoming Appointments</h2>
-    <div id="apptList"></div>
   </section>
-</main>
 
-<script>
-  async function fetchAppointments() {
-    const res = await fetch('http://localhost:5000/api/appointments');
-    if (!res.ok) return;
-    const data = await res.json();
-    const list = document.getElementById('apptList');
-    list.innerHTML = data.map(a => `
-      <div class="appointment-card">
-        <div><strong>Appointment #${a.id}</strong></div>
-        <div>Date: ${new Date(a.date).toLocaleString()}</div>
-        <div>Type: ${a.type}</div>
-        <div>Status: ${a.status}</div>
+  <section class="container my-5">
+    <h2 class="mb-4 text-center">Our Featured Doctors</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card doctor-card">
+          <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e" alt="Doctor Jean" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Dr. Jean</h5>
+            <p class="card-text">Cardiologist with 10+ years of experience. Based in Kigali.</p>
+          </div>
+        </div>
       </div>
-    `).join('');
-  }
+      <div class="col-md-4">
+        <div class="card doctor-card">
+          <img src="https://images.unsplash.com/photo-1588776814546-ec7c7b6b9c85" alt="Doctor Aline" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Dr. Aline</h5>
+            <p class="card-text">Pediatrician committed to child health. Operating in Huye.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card doctor-card">
+          <img src="https://images.unsplash.com/photo-1584367369330-82e94d3f1a6c" alt="Doctor Niyonkuru" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Dr. Niyonkuru</h5>
+            <p class="card-text">General Practitioner with a passion for community care. Located in Musanze.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  document.getElementById('apptForm')
-    .addEventListener('submit', async e => {
-    e.preventDefault();
-    const form = e.target;
-    const body = JSON.stringify({
-      patientId: +form.patientId.value,
-      doctorId: +form.doctorId.value,
-      date: form.date.value,
-      type: form.type.value,
-    });
-    const res = await fetch('http://localhost:5000/api/appointments', {
-      method: 'POST', headers: {'Content-Type': 'application/json'}, body
-    });
-    if (res.ok) {
-      alert('Booked Successfully!');
-      form.reset();
-      fetchAppointments();
-    } else alert('Booking failed');
-  });
+  <section class="download-section" id="download">
+    <h2 class="mb-3">Get the Itabaza App</h2>
+    <p class="mb-4">Download our mobile app to book appointments anytime, anywhere.</p>
+    <a href="#" class="btn btn-download px-4 py-2">Download App</a>
+  </section>
 
-  fetchAppointments();
-</script>
-
+  <footer class="bg-light text-center py-3">
+    <small>&copy; 2025 Itabaza. All rights reserved.</small>
+  </footer>
 </body>
 </html>
