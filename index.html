@@ -1,65 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Itabaza Appointments</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Itabaza Booking System</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f9ff;
+    margin: 0; padding: 0;
+    color: #333;
+  }
+  header {
+    background: #0078d7;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  main {
+    max-width: 700px;
+    margin: 2rem auto 5rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+  h2 {
+    color: #0078d7;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+  }
+  form input, form select {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  form input:focus, form select:focus {
+    outline: none;
+    border-color: #0078d7;
+    box-shadow: 0 0 5px #0078d7aa;
+  }
+  button {
+    background: #0078d7;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background: #005ea3;
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  ul li {
+    background: #e7f0ff;
+    margin-bottom: 0.75rem;
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .footer {
+    text-align: center;
+    padding: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 4rem;
+  }
+</style>
 </head>
 <body>
-  <h1>Itabaza Appointments</h1>
 
-  <h2>Book Appointment</h2>
-  <form id="appointmentForm">
-    <label>Patient ID: <input type="number" id="patientId" required /></label><br />
-    <label>Doctor ID: <input type="number" id="doctorId" required /></label><br />
-    <label>Date & Time: <input type="datetime-local" id="date" required /></label><br />
-    <label>Type:
-      <select id="type">
+<header>Itabaza Booking System</header>
+
+<main>
+  <section>
+    <h2>Book a New Appointment</h2>
+    <form id="appointmentForm" autocomplete="off">
+      <label for="patientId">Patient ID</label>
+      <input type="number" id="patientId" name="patientId" required min="1" />
+
+      <label for="doctorId">Doctor ID</label>
+      <input type="number" id="doctorId" name="doctorId" required min="1" />
+
+      <label for="date">Date & Time</label>
+      <input type="datetime-local" id="date" name="date" required />
+
+      <label for="type">Appointment Type</label>
+      <select id="type" name="type" required>
         <option value="video">Video</option>
         <option value="in-person">In-person</option>
       </select>
-    </label><br />
-    <button type="submit">Book</button>
-  </form>
 
-  <h2>All Appointments</h2>
-  <ul id="appointmentsList"></ul>
+      <button type="submit">Book Appointment</button>
+    </form>
+  </section>
 
-  <script>
-    async function fetchAppointments() {
+  <section>
+    <h2>Upcoming Appointments</h2>
+    <ul id="appointmentsList" aria-live="polite" aria-label="List of appointments">
+      <!-- Appointments will be loaded here -->
+    </ul>
+  </section>
+</main>
+
+<footer class="footer">
+  &copy; 2025 Itabaza Healthcare. All rights reserved.
+</footer>
+
+<script>
+  async function fetchAppointments() {
+    try {
       const res = await fetch('http://localhost:5000/api/appointments');
+      if (!res.ok) throw new Error('Failed to fetch');
       const appointments = await res.json();
       const list = document.getElementById('appointmentsList');
       list.innerHTML = '';
+      if(appointments.length === 0) {
+        list.innerHTML = '<li>No appointments found.</li>';
+        return;
+      }
       appointments.forEach(app => {
-        const item = document.createElement('li');
-        item.textContent = `ID: ${app.id}, Patient: ${app.patientid}, Doctor: ${app.doctorid}, Date: ${new Date(app.date).toLocaleString()}, Type: ${app.type}`;
-        list.appendChild(item);
+        const li = document.createElement('li');
+        const date = new Date(app.date);
+        li.textContent = `Appointment #${app.id} — Patient: ${app.patientid}, Doctor: ${app.doctorid}, Date: ${date.toLocaleString()}, Type: ${app.type}, Status: ${app.status}`;
+        list.appendChild(li);
       });
+    } catch (err) {
+      document.getElementById('appointmentsList').innerHTML = '<li>Error loading appointments.</li>';
+      console.error(err);
     }
+  }
 
-    document.getElementById('appointmentForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const data = {
-        patientId: parseInt(document.getElementById('patientId').value),
-        doctorId: parseInt(document.getElementById('doctorId').value),
-        date: document.getElementById('date').value,
-        type: document.getElementById('type').value,
-      };
+  document.getElementById('appointmentForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      patientId: Number(e.target.patientId.value),
+      doctorId: Number(e.target.doctorId.value),
+      date: e.target.date.value,
+      type: e.target.type.value
+    };
+    try {
       const res = await fetch('http://localhost:5000/api/appointments', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
       });
-      if (res.ok) {
-        alert('Appointment booked!');
-        fetchAppointments(); // refresh list
-      } else {
-        alert('Failed to book appointment.');
-      }
-    });
+      if (!res.ok) throw new Error('Booking failed');
+      alert('Appointment booked successfully!');
+      e.target.reset();
+      fetchAppointments();
+    } catch (err) {
+      alert('Failed to book appointment.');
+      console.error(err);
+    }
+  });
 
-    fetchAppointments(); // Load appointments on page load
-  </script>
+  // Load appointments on page load
+  fetchAppointments();
+</script>
+
 </body>
 </html>
-
