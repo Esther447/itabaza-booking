@@ -1,183 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Itabaza Booking System</title>
-<style>
-  /* Reset and base */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f9ff;
-    margin: 0; padding: 0;
-    color: #333;
-  }
-  header {
-    background: #0078d7;
-    color: white;
-    padding: 2rem;
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-  main {
-    max-width: 700px;
-    margin: 2rem auto 5rem;
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  }
-  h2 {
-    color: #0078d7;
-    margin-bottom: 1rem;
-    font-weight: 600;
-  }
-  form label {
-    display: block;
-    margin-bottom: 0.4rem;
-    font-weight: 600;
-  }
-  form input, form select {
-    width: 100%;
-    padding: 0.6rem 1rem;
-    margin-bottom: 1.2rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-  }
-  form input:focus, form select:focus {
-    outline: none;
-    border-color: #0078d7;
-    box-shadow: 0 0 5px #0078d7aa;
-  }
-  button {
-    background: #0078d7;
-    color: white;
-    border: none;
-    padding: 0.75rem 2rem;
-    font-size: 1.1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  button:hover {
-    background: #005ea3;
-  }
-  ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  ul li {
-    background: #e7f0ff;
-    margin-bottom: 0.75rem;
-    padding: 1rem 1.2rem;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
-  .footer {
-    text-align: center;
-    padding: 1rem;
-    color: #666;
-    font-size: 0.9rem;
-    margin-top: 4rem;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Itabaza Booking</title>
+  <style>
+    body {
+      margin: 0; font-family: Helvetica, Arial, sans-serif;
+      background: #f0f4f8; color: #333;
+    }
+    header {
+      background: #0052cc; color: #fff;
+      padding: 1.5rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    header h1 { margin: 0; font-size: 1.8rem; }
+    header .download-btn {
+      background: #fff; color: #0052cc;
+      padding: 0.7rem 1.2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    button {
+      background: #0052cc;
+      color: #fff; border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #003d99;
+    }
+    .appointments {
+      margin-top: 2rem;
+    }
+    .appointment-card {
+      background: #eef4ff;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .appointment-card + .appointment-card {
+      margin-top: 0.8rem;
+    }
+  </style>
 </head>
 <body>
 
-<header>Itabaza Booking System</header>
+<header>
+  <h1>Itabaza Booking</h1>
+  <a href="#" class="download-btn">Download App</a>
+</header>
 
 <main>
-  <section>
-    <h2>Book a New Appointment</h2>
-    <form id="appointmentForm" autocomplete="off">
-      <label for="patientId">Patient ID</label>
-      <input type="number" id="patientId" name="patientId" required min="1" />
-
-      <label for="doctorId">Doctor ID</label>
-      <input type="number" id="doctorId" name="doctorId" required min="1" />
-
-      <label for="date">Date & Time</label>
-      <input type="datetime-local" id="date" name="date" required />
-
-      <label for="type">Appointment Type</label>
-      <select id="type" name="type" required>
+  <h2>Book an Appointment</h2>
+  <form id="apptForm">
+    <div class="form-group">
+      <label for="patient">Patient ID</label>
+      <input type="number" id="patient" name="patientId" required />
+    </div>
+    <div class="form-group">
+      <label for="doctor">Doctor ID</label>
+      <input type="number" id="doctor" name="doctorId" required />
+    </div>
+    <div class="form-group">
+      <label for="datetime">Date & Time</label>
+      <input type="datetime-local" id="datetime" name="date" required />
+    </div>
+    <div class="form-group">
+      <label for="type">Type</label>
+      <select id="type" name="type">
         <option value="video">Video</option>
         <option value="in-person">In-person</option>
       </select>
+    </div>
+    <button type="submit">Book Now</button>
+  </form>
 
-      <button type="submit">Book Appointment</button>
-    </form>
-  </section>
-
-  <section>
+  <section class="appointments">
     <h2>Upcoming Appointments</h2>
-    <ul id="appointmentsList" aria-live="polite" aria-label="List of appointments">
-      <!-- Appointments will be loaded here -->
-    </ul>
+    <div id="apptList"></div>
   </section>
 </main>
 
-<footer class="footer">
-  &copy; 2025 Itabaza Healthcare. All rights reserved.
-</footer>
-
 <script>
   async function fetchAppointments() {
-    try {
-      const res = await fetch('http://localhost:5000/api/appointments');
-      if (!res.ok) throw new Error('Failed to fetch');
-      const appointments = await res.json();
-      const list = document.getElementById('appointmentsList');
-      list.innerHTML = '';
-      if(appointments.length === 0) {
-        list.innerHTML = '<li>No appointments found.</li>';
-        return;
-      }
-      appointments.forEach(app => {
-        const li = document.createElement('li');
-        const date = new Date(app.date);
-        li.textContent = `Appointment #${app.id} — Patient: ${app.patientid}, Doctor: ${app.doctorid}, Date: ${date.toLocaleString()}, Type: ${app.type}, Status: ${app.status}`;
-        list.appendChild(li);
-      });
-    } catch (err) {
-      document.getElementById('appointmentsList').innerHTML = '<li>Error loading appointments.</li>';
-      console.error(err);
-    }
+    const res = await fetch('http://localhost:5000/api/appointments');
+    if (!res.ok) return;
+    const data = await res.json();
+    const list = document.getElementById('apptList');
+    list.innerHTML = data.map(a => `
+      <div class="appointment-card">
+        <div><strong>Appointment #${a.id}</strong></div>
+        <div>Date: ${new Date(a.date).toLocaleString()}</div>
+        <div>Type: ${a.type}</div>
+        <div>Status: ${a.status}</div>
+      </div>
+    `).join('');
   }
 
-  document.getElementById('appointmentForm').addEventListener('submit', async e => {
+  document.getElementById('apptForm')
+    .addEventListener('submit', async e => {
     e.preventDefault();
-    const data = {
-      patientId: Number(e.target.patientId.value),
-      doctorId: Number(e.target.doctorId.value),
-      date: e.target.date.value,
-      type: e.target.type.value
-    };
-    try {
-      const res = await fetch('http://localhost:5000/api/appointments', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-      });
-      if (!res.ok) throw new Error('Booking failed');
-      alert('Appointment booked successfully!');
-      e.target.reset();
+    const form = e.target;
+    const body = JSON.stringify({
+      patientId: +form.patientId.value,
+      doctorId: +form.doctorId.value,
+      date: form.date.value,
+      type: form.type.value,
+    });
+    const res = await fetch('http://localhost:5000/api/appointments', {
+      method: 'POST', headers: {'Content-Type': 'application/json'}, body
+    });
+    if (res.ok) {
+      alert('Booked Successfully!');
+      form.reset();
       fetchAppointments();
-    } catch (err) {
-      alert('Failed to book appointment.');
-      console.error(err);
-    }
+    } else alert('Booking failed');
   });
 
-  // Load appointments on page load
   fetchAppointments();
 </script>
 
